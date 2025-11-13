@@ -1,0 +1,339 @@
+# React Native Template
+
+A production-ready React Native template with TypeScript, React Navigation, React Native Reanimated, and environment configuration support.
+
+## Features
+
+- ⚛️ **React Native 0.82.1** - Latest stable version
+- 📘 **TypeScript** - Full type safety
+- 🧭 **React Navigation V6** - Native stack navigation with type-safe routing
+- 🎨 **React Native Reanimated** - Smooth 60fps animations
+- ⚙️ **React Native Config** - Environment-specific configuration
+- 🚀 **Fastlane** - Automated deployment to Firebase App Distribution
+- 📱 **iOS & Android** - Full platform support
+- 🎯 **Clean Architecture** - Organized folder structure
+
+## Project Structure
+
+```
+.
+├── src/
+│   ├── navigation/
+│   │   └── AppNavigator.tsx           # Main navigation setup
+│   ├── screens/
+│   │   ├── HomeScreen.tsx             # Home screen with env config demo
+│   │   └── DetailsScreen.tsx          # Details screen with navigation params
+│   └── components/
+│       ├── AnimatedBox.tsx            # Reanimated animation demo
+│       └── AnimatedButton.tsx         # Interactive animated button
+├── android/
+│   └── fastlane/                      # Fastlane configuration for Android
+├── ios/
+│   └── fastlane/                      # Fastlane configuration for iOS
+├── .env                               # Fastlane & Firebase configuration
+├── .env.development                   # Development environment variables
+├── .env.production                    # Production environment variables
+├── App.tsx                            # Root component
+└── package.json                       # Dependencies and scripts
+```
+
+## Prerequisites
+
+- Node.js >= 20
+- npm or yarn
+- Xcode (for iOS development)
+- Android Studio (for Android development)
+- CocoaPods (for iOS dependencies)
+
+## Installation
+
+1. Clone this repository:
+```bash
+git clone <repository-url>
+cd RNTemplate
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Install iOS dependencies (macOS only):
+```bash
+cd ios && pod install && cd ..
+```
+
+## Environment Configuration
+
+This template uses `react-native-config` for environment-specific configuration.
+
+### Environment Files
+
+- `.env.development` - Development environment
+- `.env.production` - Production environment
+
+### Usage
+
+The environment variables are automatically loaded based on your build configuration. Access them in your code:
+
+```typescript
+import Config from 'react-native-config';
+
+console.log(Config.API_URL);
+console.log(Config.APP_NAME);
+console.log(Config.ENABLE_DEBUG);
+```
+
+### Changing Environment
+
+**iOS:**
+The environment is automatically selected based on build scheme (Debug uses `.env.development`, Release uses `.env.production`).
+
+**Android:**
+```bash
+# Development build
+ENVFILE=.env.development react-native run-android
+
+# Production build
+ENVFILE=.env.production react-native run-android --variant=release
+```
+
+## Running the App
+
+### iOS
+
+```bash
+npm run ios
+```
+
+Or open `ios/RNTemplate.xcworkspace` in Xcode and run from there.
+
+### Android
+
+```bash
+npm run android
+```
+
+Or open the `android` folder in Android Studio and run from there.
+
+### Start Metro Bundler
+
+```bash
+npm start
+```
+
+## Available Scripts
+
+### Basic Scripts
+- `npm start` - Start Metro bundler
+- `npm run lint` - Run ESLint
+- `npm test` - Run tests
+
+### Run Scripts (Development)
+- `npm run android:dev` - Run Android app with development environment
+- `npm run ios:dev` - Run iOS app with development environment
+
+### Run Scripts (Production)
+- `npm run android:prod` - Run Android app with production environment
+- `npm run ios:prod` - Run iOS app with production environment
+
+### Build Scripts (Development)
+- `npm run build:android:dev` - Build Android debug APK
+- `npm run build:ios:dev` - Build iOS debug IPA
+
+### Build Scripts (Production)
+- `npm run build:android:prod` - Build Android release APK
+- `npm run build:ios:prod` - Build iOS release IPA
+
+### Fastlane Deployment
+- `npm run fastlane:android` - Deploy Android build to Firebase App Distribution
+- `npm run fastlane:ios` - Deploy iOS build to Firebase App Distribution
+
+## Libraries Included
+
+### React Navigation V6
+Provides native-like navigation with type-safe routing. Configured with Native Stack Navigator for optimal performance.
+
+**Example:**
+```typescript
+navigation.navigate('Details', { itemId: 1, title: 'Item' });
+```
+
+### React Native Reanimated
+The most powerful animation library for React Native, running animations on the native thread for 60fps performance.
+
+**Example:**
+```typescript
+const offset = useSharedValue(0);
+
+const animatedStyles = useAnimatedStyle(() => ({
+  transform: [{ translateX: offset.value }],
+}));
+
+offset.value = withSpring(100);
+```
+
+### React Native Config
+Manage environment variables for different build configurations.
+
+**Features:**
+- Separate configurations for dev/staging/production
+- Native access on both iOS and Android
+- Type-safe with TypeScript definitions
+
+### Fastlane
+Automated deployment to Firebase App Distribution.
+
+**Setup:**
+
+1. Install Fastlane dependencies:
+```bash
+# Android
+cd android && bundle install && cd ..
+
+# iOS
+cd ios && bundle install && cd ..
+```
+
+2. Configure Firebase App Distribution:
+   - Create a Firebase project
+   - Add your Android/iOS apps to Firebase
+   - Download the service account JSON file
+   - Update `.env` file with your Firebase configuration:
+
+```env
+FIREBASE_APP_ID_ANDROID=your_firebase_app_id_android
+FIREBASE_APP_ID_IOS=your_firebase_app_id_ios
+FIREBASE_SERVICE_CREDENTIALS_FILE=path/to/firebase-service-credentials.json
+APPLE_ID=your_apple_id@example.com
+TEAM_ID=your_team_id
+```
+
+3. Deploy:
+```bash
+# Deploy Android
+npm run fastlane:android
+
+# Deploy iOS
+npm run fastlane:ios
+```
+
+**Custom Lanes:**
+You can customize Fastlane lanes in:
+- `android/fastlane/Fastfile` - Android deployment configuration
+- `ios/fastlane/Fastfile` - iOS deployment configuration
+
+## TypeScript
+
+This template is fully typed with TypeScript. Key type definitions:
+
+- Navigation types in `src/navigation/AppNavigator.tsx`
+- Environment config types in `react-native-config.d.ts`
+
+## Customization
+
+### Changing App Name
+
+1. Update `app.json`:
+```json
+{
+  "name": "YourAppName",
+  "displayName": "Your App Name"
+}
+```
+
+2. For iOS, update display name in Xcode
+3. For Android, update `android/app/src/main/res/values/strings.xml`
+
+### Adding New Screens
+
+1. Create screen component in `src/screens/`
+2. Add route type to `RootStackParamList` in `AppNavigator.tsx`
+3. Add screen to stack navigator
+
+### Adding Environment Variables
+
+1. Add variable to `.env.development` and `.env.production`
+2. Update type definitions in `react-native-config.d.ts`
+3. Access via `Config.YOUR_VARIABLE`
+
+## Troubleshooting
+
+### react-native-screens ChoreographerCompat Error (Android)
+
+If you encounter `Unresolved reference 'ChoreographerCompat'` error:
+
+1. The `androidx.core:core` dependency has been added to `android/app/build.gradle`
+2. Clean and rebuild:
+```bash
+cd android
+./gradlew clean
+cd ..
+npm run android:dev
+```
+
+### iOS Build Issues
+
+```bash
+cd ios
+pod deintegrate
+pod install
+cd ..
+```
+
+### Android Build Issues
+
+```bash
+cd android
+./gradlew clean
+cd ..
+```
+
+### After Installing Dependencies
+
+If you get errors after `npm install`:
+
+**Android:**
+```bash
+cd android && ./gradlew clean && cd ..
+npm run android:dev
+```
+
+**iOS:**
+```bash
+cd ios && pod install && cd ..
+npm run ios:dev
+```
+
+### Metro Bundler Issues
+
+```bash
+npm start -- --reset-cache
+```
+
+### Reanimated Not Working
+
+Make sure `react-native-reanimated/plugin` is listed **last** in your `babel.config.js` plugins array.
+
+### Environment Variables Not Loading
+
+Make sure you're using the correct script:
+- Development: `npm run android:dev` or `npm run ios:dev`
+- Production: `npm run android:prod` or `npm run ios:prod`
+
+## Additional Resources
+
+- [React Native Documentation](https://reactnative.dev/)
+- [React Navigation Docs](https://reactnavigation.org/)
+- [Reanimated Documentation](https://docs.swmansion.com/react-native-reanimated/)
+- [React Native Config](https://github.com/luggit/react-native-config)
+- [Fastlane Documentation](https://docs.fastlane.tools/)
+- [Firebase App Distribution](https://firebase.google.com/docs/app-distribution)
+
+## License
+
+MIT
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.

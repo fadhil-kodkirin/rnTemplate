@@ -1,0 +1,33 @@
+default_platform(:android)
+
+platform :android do
+  desc "Deploy a new build to Firebase App Distribution"
+  lane :deploy do
+    gradle(
+      task: "clean assembleRelease",
+      project_dir: "."
+    )
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ID_ANDROID"],
+      service_credentials_file: ENV["FIREBASE_SERVICE_CREDENTIALS_FILE"],
+      release_notes: "New release from Fastlane",
+      groups: "testers"
+    )
+  end
+
+  desc "Deploy development build to Firebase App Distribution"
+  lane :deploy_dev do
+    gradle(
+      task: "clean assembleDebug",
+      project_dir: "."
+    )
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ID_ANDROID"],
+      service_credentials_file: ENV["FIREBASE_SERVICE_CREDENTIALS_FILE"],
+      release_notes: "Development build from Fastlane",
+      groups: "internal-testers"
+    )
+  end
+end

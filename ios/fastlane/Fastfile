@@ -1,0 +1,41 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Deploy a new build to Firebase App Distribution"
+  lane :deploy do
+    build_app(
+      workspace: "RNTemplate.xcworkspace",
+      scheme: "RNTemplate",
+      configuration: "Release",
+      export_method: "development",
+      output_directory: "./build",
+      output_name: "RNTemplate.ipa"
+    )
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ID_IOS"],
+      service_credentials_file: ENV["FIREBASE_SERVICE_CREDENTIALS_FILE"],
+      release_notes: "New release from Fastlane",
+      groups: "testers"
+    )
+  end
+
+  desc "Deploy development build to Firebase App Distribution"
+  lane :deploy_dev do
+    build_app(
+      workspace: "RNTemplate.xcworkspace",
+      scheme: "RNTemplate",
+      configuration: "Debug",
+      export_method: "development",
+      output_directory: "./build",
+      output_name: "RNTemplate-Dev.ipa"
+    )
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ID_IOS"],
+      service_credentials_file: ENV["FIREBASE_SERVICE_CREDENTIALS_FILE"],
+      release_notes: "Development build from Fastlane",
+      groups: "internal-testers"
+    )
+  end
+end
